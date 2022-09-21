@@ -1,27 +1,31 @@
 #!/usr/bin/python3
-"""return json object"""
-
-
-from flask import Flask, jsonify
+"""Index file for Flask blueprints"""
 from api.v1.views import app_views
+from flask import jsonify
 from models import storage
 
 
-@app_views.route('/status')
-def status():
-    """Return json with status"""
-    ret = {"status": "OK"}
-    return jsonify(ret)
+hbnbText = {
+    "amenities": "Amenity",
+    "cities": "City",
+    "places": "Place",
+    "reviews": "Review",
+    "states": "State",
+    "users": "User"
+}
+
+
+@app_views.route('/status', strict_slashes=False)
+def ret_status():
+    """hbnbStatus"""
+    return jsonify(status="OK")
 
 
 @app_views.route('/stats', strict_slashes=False)
-def stats():
-    """retrieves the number of eack objects by type"""
-    new_dict = dict()
-    new_dict['amenities'] = storage.count('Amenity')
-    new_dict['cities'] = storage.count('City')
-    new_dict['places'] = storage.count('Place')
-    new_dict['reviews'] = storage.count('Review')
-    new_dict['states'] = storage.count('State')
-    new_dict['users'] = storage.count('User')
-    return jsonify(new_dict)
+def hbnbStats():
+    """hbnbStats"""
+    return_dict = {}
+    for key, value in hbnbText.items():
+        return_dict[key] = storage.count(value)
+    return jsonify(return_dict)
+  

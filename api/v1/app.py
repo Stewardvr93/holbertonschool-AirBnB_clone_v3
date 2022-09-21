@@ -1,37 +1,32 @@
 #!/usr/bin/python3
-""" Module for start the API """
-
-from flask import Flask, jsonify
-from flask_cors import CORS
+"""First blueprint for HBNB Project"""
+from flask import Flask, jsonify, make_response
 from models import storage
 from api.v1.views import app_views
-from os import getenv
+import os
+from flask_cors import CORS
 
-
+#Alejo get serious please
 app = Flask(__name__)
-app.register_blueprint(app_views)
-app.url_map.strict_slashes = False
 cors = CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
+app.register_blueprint(app_views)
 
 
 @app.teardown_appcontext
-def teardown_appcontext(self):
-    """call method to close"""
+def teardown_close(self):
     storage.close()
 
 
 @app.errorhandler(404)
-def page_not_found(err):
-    """error handler"""
-    err_dict = {"error": "Not found"}
-    return jsonify(err_dict), 404
+def page_not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 if __name__ == "__main__":
-    host_env = getenv('HBNB_API_HOST')
-    port_env = getenv('HBNB_API_PORT')
-    if not host_env:
-        host = "0.0.0.0"
-    if not port_env:
-        port = 5000
-    app.run(host=host_env, port=int(port_env), threaded=True)
+    host = os.getenv('HBNB_API_HOST')
+    port = os.getenv('HBNB_API_PORT')
+    if not host:
+        host = '0.0.0.0'
+    if not port:
+        port = '5000'
+    app.run(host=host, port=port, threaded=True)
