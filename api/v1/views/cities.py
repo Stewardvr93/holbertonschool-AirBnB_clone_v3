@@ -72,4 +72,17 @@ def put_city(city_id):
             setattr(city, attr, val)
     city.save()
     return jsonify(city.to_dict())
-  
+Footer
+© 2022 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
